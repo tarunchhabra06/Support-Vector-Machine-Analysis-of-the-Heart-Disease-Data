@@ -1,0 +1,50 @@
+
+
+
+**Problem Statement** Analysis of the South Africa Heart Disease data using SVM.
+```{r,echo=FALSE}
+library(ElemStatLearn)
+library(e1071)
+library(kernlab)
+data.train<-SAheart
+data.train$chd=as.factor(data.train$chd)
+data.train<-data.train[complete.cases(data.train),]
+
+```
+
+**Linear Kernel** For Support vector algorithm we try to find the best model using cross validation. Keeping cost as a varibale changing it from 0.01 to 1000, we find the best model for Linear Kernel. 
+
+```{r,echo=FALSE}
+#cross validation by tuning
+#linear kernel
+set.seed(100)
+tune.out=tune(svm,chd~.,data=data.train,
+              kernel="linear",ranges=list(cost=c(0.01,0.1,10,100,1000)))
+summary(tune.out)
+```
+
+
+**Radial Kernel** For Support vector algorithm we try to find the best model using cross validation. Keeping cost as a varibale changing it from 0.01 to 1000, we find the best model for Radial Kernel. 
+
+
+```{r,echo=FALSE}
+set.seed(100)
+#radial kernel
+tune.radial.out=tune(svm,chd~.,data=data.train,
+              kernel="radial",ranges=list(cost=c(0.01,0.1,10,100,1000)))
+summary(tune.radial.out)
+```
+
+
+**Polynomial Kernel** For Support vector algorithm we try to find the best model using cross validation. Keeping cost as a varibale changing it from 0.01 to 1000, we find the best model for Polynomial Kernel. 
+
+
+```{r,echo=FALSE}
+#Polynomial kernel
+set.seed(100)
+tune.poly.out=tune(svm,chd~.,data=data.train,
+              kernel="polynomial",degree = 3, coef0= 1, ranges=list(cost=c(0.01,0.1,10,100,1000)))
+summary(tune.poly.out)
+```
+
+**RESULT** We find the least error with Polynomial Kernel with 3 degrees and Cost as 0.1. 
